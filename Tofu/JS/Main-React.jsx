@@ -5,9 +5,4 @@ import App from './App'
 const container = document.querySelector('#app')
 const root = createRoot(container)
 
-root.render(
-    <>
-        <canvas></canvas>
-        <App></App>
-    </>
-)
+root.render(<App></App>)
