@@ -7,8 +7,6 @@ import Tofu, { Color } from '../Tofu'
 const SAT_POLYGON = SAT.Polygon.name
 const SAT_CIRCLE = SAT.Circle.name
 
-console.log(SAT_POLYGON, SAT_CIRCLE)
-
 class Collision {
     // for collidable game objects
     static _MEMOIZE = {
@@ -98,36 +96,6 @@ class Collision {
 
         return noclips
     }
-
-    // addIgnore(...GameObjects) {
-    //     let updatedOnce = false
-
-    //     for(let i = 0; i < GameObjects.length; i++) {
-    //         let GameObject = GameObjects[i]
-
-    //         if(!(GameObject instanceof TofuGameObject)) continue
-
-    //         updatedOnce = true
-    //         this.ignore.push(GameObject)
-    //     }
-
-    //     return updatedOnce
-    // }
-
-    // removeIgnore(...GameObjects) {
-    //     let updatedOnce = false
-
-    //     for(let i = 0; i < GameObjects.length; i++) {
-    //         let GameObject = GameObjects[i]
-
-    //         if(!(GameObject instanceof TofuGameObject)) continue
-
-    //         updatedOnce = true
-    //         this.ignore.splice(this.ignore.findIndex(g => g.UUID === GameObject.UUID), 1)
-    //     }
-
-    //     return updatedOnce
-    // }
 
     toggleNoClip() {
         this.NoClip = !this.NoClip

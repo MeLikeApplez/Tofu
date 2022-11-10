@@ -88,6 +88,8 @@ export default class Mine extends TofuGameObject {
             }
         }
 
+        this.Tank.mineCount--
+
         this.remove()
     }
 

@@ -11,8 +11,12 @@ export default class Scene {
 
         this.width = width
         this.height = height
+        this.allowDynamicResizing = true
         this.internalResolution = { width: 1280, height: 720 }
-        this.aspectRatio = 16 / 9
+
+        this.aspectRatioWidth = 16
+        this.aspectRatioHeight = 9
+        this.aspectRatio = this.aspectRatioWidth / this.aspectRatioHeight
 
         this._MEMOIZE = {
             lastUpdate: Date.now()
@@ -21,6 +25,17 @@ export default class Scene {
         this.setSize(width, height)
 
         this.animation()
+
+        window.onresize = () => {
+            if(!this.allowDynamicResizing) return
+
+            const { innerWidth, innerHeight } = window
+
+            this.width = innerWidth
+            this.height = innerHeight
+
+            this.setSize(this.width, this.height)
+        }
     }
 
     getGameObjects() {
@@ -64,26 +79,14 @@ export default class Scene {
     }
 
     setSize(width=0, height=0) {
-        // if(width / height !== 16 / 9) return
-
-        // let baseWidth = 1280
-        // let baseHeight = 720        
-        let scaleWidth = 2
-        let scaleHeight = 2
-
-        // console.log(width, height)
-        // console.log(baseWidth, baseHeight)
-
-        this.canvasElement.width = width * 2
-        this.canvasElement.height = height * 2
+        this.canvasElement.width = this.internalResolution.width
+        this.canvasElement.height = this.internalResolution.height
 
         this.canvasElement.style.width = `${width}px`
         this.canvasElement.style.height = `${height}px`
 
         // flip the y-axis to a normal traditional graph
         this.canvasContext.transform(1, 0, 0, -1, 0, this.canvasElement.height)
-
-        this.canvasContext.scale(scaleWidth, scaleHeight)
 
         this.canvasContext.strokeStyle = 'white'
         this.canvasContext.fillStyle = 'white'

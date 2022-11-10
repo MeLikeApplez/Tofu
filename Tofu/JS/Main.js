@@ -13,11 +13,14 @@ const wallThickness = 500
 Tofu.Engine(canvas, width, height)
 Tofu.addScript(Start, Animate)
 
+const sceneWidth = Tofu.Scene.internalResolution.width
+const sceneHeight = Tofu.Scene.internalResolution.height
+
 // wall borders
-new Obstacle({ y: height, width, height: wallThickness, Color: Color.rgb(250, 140, 80) }) // top
-new Obstacle({ y: -wallThickness, width, height: wallThickness, Color: Color.rgb(250, 120, 50) }) // bottom
-new Obstacle({ x: -wallThickness, width: wallThickness, height, Color: Color.rgb(250, 140, 80) }) // left
-new Obstacle({ x: width, width: wallThickness, height, Color: Color.rgb(250, 140, 80) }) // right
+new Obstacle({ y: sceneHeight, width: sceneWidth, height: wallThickness, Color: Color.rgb(250, 140, 80) }) // top
+new Obstacle({ y: -wallThickness, width: sceneWidth, height: wallThickness, Color: Color.rgb(250, 120, 50) }) // bottom
+new Obstacle({ x: -wallThickness, width: wallThickness, height: sceneHeight, Color: Color.rgb(250, 140, 80) }) // left
+new Obstacle({ x: sceneWidth, width: wallThickness, height: sceneHeight, Color: Color.rgb(250, 140, 80) }) // right
 
 const tank = new Tank(50, 310)
 const ai = new AI({
@@ -28,17 +31,9 @@ const ai = new AI({
     Target: tank
 })
 
-new Obstacle({
-    x: 550, y: 200, width: 75, height: 300, Color: Color.rgb(220, 190, 130)
-})
-
-new Obstacle({
-    x: 300, y: 200, width: 75, height: 100, Color: Color.rgb(220, 190, 130)
-})
-
-new Obstacle({
-    x: 300, y: 400, width: 75, height: 100, Color: Color.rgb(220, 190, 130)
-})
+new Obstacle({ x: 550, y: 200, width: 75, height: 300, Color: Color.rgb(220, 190, 130) })
+new Obstacle({ x: 300, y: 200, width: 75, height: 100, Color: Color.rgb(220, 190, 130) })
+new Obstacle({ x: 300, y: 400, width: 75, height: 100, Color: Color.rgb(220, 190, 130) })
 
 window.tank = tank
 window.ai = ai

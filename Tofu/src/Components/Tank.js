@@ -124,9 +124,6 @@ export default class Tank extends TofuGameObject {
 
         mine.Collision.toggleNoClip()        
 
-        // console.log(mine)
-        // console.log('mine ' + (this.mineCount + 1))
-
         this.lastTimeMine = performance.now()
         this.mineCount++
     }
@@ -134,7 +131,7 @@ export default class Tank extends TofuGameObject {
     shoot() {
         if(!this.Properties.isInTheScene) return
 
-        const delay = 300
+        const delay = 250
 
         if(this.shotCount >= this.shotCountLimit) return
         if(this.lastTimeShot !== 0 && performance.now() - this.lastTimeShot < delay) return

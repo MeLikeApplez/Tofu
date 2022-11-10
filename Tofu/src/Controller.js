@@ -16,18 +16,21 @@ export default class Controller {
         this.keyUp = true
         this.keyDown = false
 
-        this.canvasElement.onmousemove = function(event) {
+        // https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        window.onmousemove = function(event) {
             controller.MouseEvent = event
-            
-            let rect = this.getBoundingClientRect()
+
+            let rect = controller.canvasElement.getBoundingClientRect()
             let { clientX, clientY } = event
-            let newMouseX = clientX - rect.left
-            let newMouseY = ((clientY - rect.top) - (this.height / 2)) * -1
+            // let newMouseX = clientX - rect.left
+            // let newMouseY = ((clientY - rect.top) - (this.height / 2)) * -1
 
             // get relative position from window to canvas
-            controller.mouseX = newMouseX
+            controller.mouseX = (clientX - rect.left) / (rect.right - rect.left) * controller.canvasElement.width
             // mirror y position
-            controller.mouseY = newMouseY
+            controller.mouseY = -(clientY - rect.top) + controller.canvasElement.height
+
+            // console.log(controller.canvasElement.style.width, controller.canvasElement.style.height)
         }
 
         this.canvasElement.onmousedown = function(event) {
