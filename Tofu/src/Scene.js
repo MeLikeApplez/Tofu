@@ -11,7 +11,7 @@ export default class Scene {
 
         this.width = width
         this.height = height
-        this.allowDynamicResizing = true
+        this.allowDynamicResizing = false
         this.internalResolution = { width: 1280, height: 720 }
 
         this.aspectRatioWidth = 16
