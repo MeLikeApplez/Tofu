@@ -11,6 +11,8 @@ export default class Scene {
 
         this.width = width
         this.height = height
+        this.internalResolution = { width: 1280, height: 720 }
+        this.aspectRatio = 16 / 9
 
         this._MEMOIZE = {
             lastUpdate: Date.now()

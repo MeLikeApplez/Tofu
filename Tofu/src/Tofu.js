@@ -11,6 +11,8 @@ import _Geometry from './Geometry/Geometry'
 import _Color from './Color'
 import _Particle from './GameObject/Particle'
 
+import SAT from 'sat'
+
 export const TofuGameObject = _TofuGameObject
 export const Particle = _Particle
 export const Animation = new _Animation()
@@ -334,7 +336,7 @@ class Tofu {
         this.Scene = new Scene(canvas, width, height)
         this.Controller = new Controller(canvas)
 
-		this.toGlobal({ Tofu: this, Scene: this.Scene, Collision, Geometry, Color, Calculate })
+		this.toGlobal({ Tofu: this, Scene: this.Scene, Collision, Geometry, Color, Calculate, SAT })
     }
 
     addScript(Init, Draw) {

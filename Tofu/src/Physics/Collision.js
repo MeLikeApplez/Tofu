@@ -2,6 +2,13 @@
 import SAT from 'sat'
 import Tofu, { Color } from '../Tofu'
 
+// use these for build production(due to constructor.name chaning because of minification)
+// example: this.ShapeType === SAT_POLYGON instead of this.ShapeType === 'Polygon'
+const SAT_POLYGON = SAT.Polygon.name
+const SAT_CIRCLE = SAT.Circle.name
+
+console.log(SAT_POLYGON, SAT_CIRCLE)
+
 class Collision {
     // for collidable game objects
     static _MEMOIZE = {
@@ -22,7 +29,7 @@ class Collision {
         let geometryType = this.GameObject.Geometry ? this.GameObject.Geometry.GeometryType : null
 
         this.Shape = geometryType === 'Polygon' ? SAT.Polygon : (geometryType === 'Circle' ? SAT.Circle : null)
-        this.ShapeType = geometryType
+        this.ShapeType = this.Shape ? this.Shape.name : null
         this.SAT = null
 
         this.updateSAT()
@@ -33,9 +40,9 @@ class Collision {
     static pointInShape(x, y, sat) {
         let shape = sat.constructor.name
 
-        if(shape === 'Polygon') {
+        if(shape === SAT_POLYGON) {
             return SAT.pointInPolygon(new SAT.Vector(x, y), sat) 
-        } else if(shape === 'Circle') {
+        } else if(shape === SAT_CIRCLE) {
             return SAT.pointInCircle(new SAT.Vector(x, y), sat) 
         }
     }
@@ -45,12 +52,12 @@ class Collision {
         let bShape = satB.constructor.name
         let response = new SAT.Response()
 
-        if(aShape === 'Polygon') {
-            if(bShape === 'Polygon') return SAT.testPolygonPolygon(satA, satB, response) ? response : false
+        if(aShape === SAT_POLYGON) {
+            if(bShape === SAT_POLYGON) return SAT.testPolygonPolygon(satA, satB, response) ? response : false
 
             return SAT.testPolygonCircle(satA, satB, response) ? response : false
-        } else if(aShape === 'Circle') {
-            if(bShape === 'Circle') return SAT.testCircleCircle(satA, satB, response) ? response : false
+        } else if(aShape === SAT_CIRCLE) {
+            if(bShape === SAT_CIRCLE) return SAT.testCircleCircle(satA, satB, response) ? response : false
 
             return SAT.testCirclePolygon(satA, satB, response) ? response : false
         }
@@ -153,7 +160,7 @@ class Collision {
     getSATEdit(x=0, y=0, radius) {
         if(!this.ShapeType) return false
 
-        if(this.ShapeType === 'Polygon') {
+        if(this.ShapeType === SAT_POLYGON) {
             let points = this.SAT.points
             let newSAT = []
 
@@ -164,7 +171,7 @@ class Collision {
             }
 
             return new this.Shape(new SAT.Vector(), newSAT)
-        } else if(this.ShapeType === 'Circle') {
+        } else if(this.ShapeType === SAT_CIRCLE) {
             let point = this.SAT.pos
             radius = radius ?? this.SAT.r
             
@@ -220,7 +227,7 @@ class Collision {
     updateSAT() {
         if(!this.ShapeType) return false
 
-        if(this.ShapeType === 'Polygon') {
+        if(this.ShapeType === SAT_POLYGON) {
             let points = this.GameObject.Geometry.points
             let vectorPoints = []
 
@@ -231,7 +238,7 @@ class Collision {
             if(this.SAT) return this.SAT.setPoints(vectorPoints)
 
             this.SAT = new this.Shape(new SAT.Vector(), vectorPoints)
-        } else if(this.ShapeType === 'Circle') {
+        } else if(this.ShapeType === SAT_CIRCLE) {
             let { x, y, radius } = this.GameObject.Geometry
 
             this.SAT = new this.Shape(new SAT.Vector(x, y), radius)

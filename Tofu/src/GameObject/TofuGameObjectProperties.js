@@ -5,6 +5,6 @@ export default class TofuGameObjectProperties {
         this.isInTheScene = false
     }
 
-    get isCollisionAllowed() { return !!this.GameObject.Collision }
+    get isCollisionAllowed() { return !!this.GameObject.Collision}
     get isHandleCollisionsAllowed() { return this.isCollisionAllowed ? this.GameObject.Collision.HandleCollisions : false }
 }

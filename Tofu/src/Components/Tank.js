@@ -105,7 +105,7 @@ export default class Tank extends TofuGameObject {
     mine() {
         if(!this.Properties.isInTheScene) return
 
-        const delay = 200
+        const delay = 300
 
         if(this.mineCount >= this.mineCountLimit) return
         if(this.lastTimeMine !== 0 && performance.now() - this.lastTimeMine < delay) return
@@ -134,7 +134,7 @@ export default class Tank extends TofuGameObject {
     shoot() {
         if(!this.Properties.isInTheScene) return
 
-        const delay = 100
+        const delay = 300
 
         if(this.shotCount >= this.shotCountLimit) return
         if(this.lastTimeShot !== 0 && performance.now() - this.lastTimeShot < delay) return
