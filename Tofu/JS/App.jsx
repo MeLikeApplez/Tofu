@@ -1,13 +1,29 @@
-import React, { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import Pages from './Pages'
 import Tofu from '../src/Tofu'
 
-// https://www.netlify.com/blog/how-to-deploy-vue-3-and-vite-app-in-5-minutes/
 export default function App() {
-    useEffect(() => {
-        
-    }, [])
-    
-    return <>
+    const multiplayerScreen = useRef()
 
+    useEffect(() => {
+        Tofu.Controller.listenForKeyboard((event, key, type) => {
+            if(type === 'down' && key === '/') {
+                const display = multiplayerScreen.current.style.display
+
+                multiplayerScreen.current.style.display = display === 'flex' ? 'none' : 'flex'
+            }
+        })
+    }, [])
+
+    return <>
+        <div ref={multiplayerScreen} className='Multiplayer'>
+            Multiplayer
+            <button>Multiplayer</button>
+            <button>Settings</button>
+        </div>
     </>
+}
+
+function User({ name }) {
+    return <></>
 }

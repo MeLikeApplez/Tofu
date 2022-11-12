@@ -16,6 +16,25 @@ export default class Controller {
         this.keyUp = true
         this.keyDown = false
 
+        this.keyboardListeners = []
+        this.mouseListeners = []
+
+        const updateKeyboardListener = (event, key, type) => {
+            for(let i = 0; i < this.keyboardListeners.length; i++) {
+                let listeners = this.keyboardListeners[i]
+
+                listeners(event, key, type)
+            }
+        }
+
+        const updateMouseListeners = (event, which, type) => {
+            for(let i = 0; i < this.mouseListeners.length; i++) {
+                let listeners = this.mouseListeners[i]
+
+                listeners(event, which, type)
+            }
+        }
+
         // https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
         window.onmousemove = function(event) {
             controller.MouseEvent = event
@@ -38,6 +57,8 @@ export default class Controller {
             controller.mouseUp = false
             controller.mouseDown = true
             controller.whichMouse = event.which === 1 ? 'left' : (event.which === 2 ? 'middle' : 'right')
+
+            updateMouseListeners(event, controller.whichMouse, 'down')
         }
 
         this.canvasElement.onmouseup = function(event) {
@@ -45,6 +66,8 @@ export default class Controller {
             controller.mouseUp = true
             controller.mouseDown = false
             controller.whichMouse = ''
+
+            updateMouseListeners(event, event.which === 1 ? 'left' : (event.which === 2 ? 'middle' : 'right'), 'up')
         }
 
         window.onkeydown = function(event) {
@@ -55,6 +78,8 @@ export default class Controller {
             
             if(!controller.keyPress.includes(event.key)) {
                 controller.keyPress.push(event.key)
+
+                updateKeyboardListener(event, event.key, 'down')
             }
         }
 
@@ -65,6 +90,8 @@ export default class Controller {
 
             if(index !== -1) {
                 controller.keyPress.splice(index, 1)
+
+                updateKeyboardListener(event, event.key, 'up')
             }
 
             if(controller.keyPress.length === 0) {
@@ -80,5 +107,27 @@ export default class Controller {
         }
 
         return false
+    }
+
+    listenForKeyboard(callback) {
+        if(typeof callback !== 'function') return
+        let index = this.keyboardListeners.length
+
+        this.keyboardListeners.push(callback)
+
+        return {
+            remove: () => this.keyboardListeners.splice(index, 1)
+        }
+    }
+
+    listenForMouse(callback) {
+        if(typeof callback !== 'function') return
+        let index = this.mouseListeners.length
+
+        this.mouseListeners.push(callback)
+
+        return {
+            remove: () => this.mouseListeners.splice(index, 1)
+        }
     }
 }
