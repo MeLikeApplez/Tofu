@@ -19,6 +19,9 @@ export default class Controller {
         this.keyboardListeners = []
         this.mouseListeners = []
 
+        this.allowKeyboardListening = true
+        this.allowMouseListening = true
+
         const updateKeyboardListener = (event, key, type) => {
             for(let i = 0; i < this.keyboardListeners.length; i++) {
                 let listeners = this.keyboardListeners[i]
@@ -37,6 +40,8 @@ export default class Controller {
 
         // https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
         window.onmousemove = function(event) {
+            if(!controller.allowMouseListening) return
+
             controller.MouseEvent = event
 
             let rect = controller.canvasElement.getBoundingClientRect()
@@ -53,45 +58,55 @@ export default class Controller {
         }
 
         this.canvasElement.onmousedown = function(event) {
+            updateMouseListeners(event, controller.whichMouse, 'down')
+            
+            if(!controller.allowMouseListening) return
+
             controller.MouseEvent = event
             controller.mouseUp = false
             controller.mouseDown = true
             controller.whichMouse = event.which === 1 ? 'left' : (event.which === 2 ? 'middle' : 'right')
-
-            updateMouseListeners(event, controller.whichMouse, 'down')
         }
 
         this.canvasElement.onmouseup = function(event) {
+            updateMouseListeners(event, event.which === 1 ? 'left' : (event.which === 2 ? 'middle' : 'right'), 'up')
+
+            if(!controller.allowMouseListening) return
+
             controller.MouseEvent = event
             controller.mouseUp = true
             controller.mouseDown = false
             controller.whichMouse = ''
-
-            updateMouseListeners(event, event.which === 1 ? 'left' : (event.which === 2 ? 'middle' : 'right'), 'up')
         }
 
         window.onkeydown = function(event) {
+            let includes = !controller.keyPress.includes(event.key)
+
+            if(includes) updateKeyboardListener(event, event.key, 'down')
+
+            if(!controller.allowKeyboardListening) return
+
             controller.KeyboardEvent = event
             
             controller.keyUp = false
             controller.keyDown = true
             
-            if(!controller.keyPress.includes(event.key)) {
+            if(includes) {
                 controller.keyPress.push(event.key)
-
-                updateKeyboardListener(event, event.key, 'down')
             }
         }
 
         window.onkeyup = function(event) {
-            controller.KeyboardEvent = event
-
             let index = controller.keyPress.findIndex(v => v === event.key)
+
+            if(index !== -1) updateKeyboardListener(event, event.key, 'up')
+
+            if(!controller.allowKeyboardListening) return
+
+            controller.KeyboardEvent = event
 
             if(index !== -1) {
                 controller.keyPress.splice(index, 1)
-
-                updateKeyboardListener(event, event.key, 'up')
             }
 
             if(controller.keyPress.length === 0) {
