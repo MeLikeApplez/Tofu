@@ -8,32 +8,25 @@ export default class Bullet extends TofuGameObject {
         this.bounce = 0
         this.bounceLimit = 1
         this.Tank = options.Tank || null
-        this.Trail = Tofu.Particle({
+        this.Trail = Tofu.ParticleEffects({
             Geometry: new Geometry.Polygon(0, 0, 20, 0, 20, 5, 0, 5),
-            ColorCycle: 'random',
-            Color: Color.rgb(200, 120, 40, 1),
+            Color: Color.rgb(250, 120, 40),
             CompositeOperation: 'lighter',
-            amount: 10,
-            amountSlice: 1,
-            interval: 1,
-            range: [0, 0, 0, 0],
-            spread: 'range',
-            spreadSpeed: 1,
-            fadeout: 200,
             loop: true
+        }).direction({
+            amount: 10, interval: 1, rate: 1,
+            speed: 1,
+            fadeout: 0.2,
         })
-        this.Explosion = Tofu.Particle({
-            Geometry: new Geometry.Box(0, 0, 10, 10),
-            ColorCycle: 'random',
-            Color: Color.rgb(200, 120, 40, 1),
+        this.Explosion = Tofu.ParticleEffects({
+            Geometry: new Geometry.Circle(0, 0, 10),
+            Color: Color.rgb(40, 40, 40, 0.5),
             CompositeOperation: 'lighter',
-            amount: 10,
-            amountSlice: 1,
-            interval: 1,
-            spread: 'circle',
-            spreadSpeed: 2,
-            fadeout: 200,
-            // loop: true
+            loop: true
+        }).spread({
+            amount: 5, interval: 1, rate: 5,
+            speed: 3, size: 2,
+            fadeout: 0.2, duration: 0.2,
         })
 
         Tofu.Scene.add(this)
@@ -107,10 +100,9 @@ export default class Bullet extends TofuGameObject {
         this.Explosion.Geometry.position.x(center.x)
         this.Explosion.Geometry.position.y(center.y)
 
-        this.Trail.onStop = () => Tofu.Scene.remove(this.Trail)
+        this.Trail.addEventListener('complete', () => Tofu.Scene.remove(this.Trail))
+        this.Explosion.addEventListener('complete', () => Tofu.Scene.remove(this.Explosion))
 
-        this.Explosion.onPause = () => Tofu.Scene.remove(this.Explosion)
-
-        Tofu.Scene.remove(this, this.Trail)
+        Tofu.Scene.remove(this)
     }
 }

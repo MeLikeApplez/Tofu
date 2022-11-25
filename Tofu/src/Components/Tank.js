@@ -23,18 +23,15 @@ export default class Tank extends TofuGameObject {
             name: 'Tank-Barrel'
         })
 
-        this.Particle = Tofu.Particle({
-            Geometry: new Geometry.Box(0, 0, 40, 40),
-            ColorCycle: 'random',
-            Color: Color.rgb(90, 90, 90, 0.2),
-            // CompositeOperation: 'lighter',
-            amount: 1000,
-            amountSlice: 5,
-            interval: 10,
-            spread: 'circle',
-            spreadSpeed: 2,
-            fadeout: 500,
+        this.Particle = Tofu.ParticleEffects({
+            Geometry: new Geometry.Box(150, 150, 30, 30),
+            Color: Color.rgb(250, 120, 40, 0.5),
+            CompositeOperation: 'lighter',
             loop: true
+        }).spread({
+            amount: 40, interval: 1, rate: 40,
+            speed: 3, size: 2.8,
+            fadeout: 0.3, duration: 0.3,
         })
 
         this.Body.Tank = this

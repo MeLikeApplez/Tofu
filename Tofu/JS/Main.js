@@ -1,4 +1,4 @@
-import Tofu, { Geometry, Color, Collision, Particle } from '../src/Tofu'
+import Tofu, { Geometry, Color, Collision } from '../src/Tofu'
 import Tank from '../src/Components/Tank'
 import Obstacle from '../src/Components/Obstacle'
 import AI from '../src/Components/AI'
@@ -31,30 +31,31 @@ const ai = new AI({
     Target: tank
 })
 
-new Obstacle({ x: 550, y: 200, width: 75, height: 300, Color: Color.rgb(220, 190, 130) })
-new Obstacle({ x: 300, y: 200, width: 75, height: 100, Color: Color.rgb(220, 190, 130) })
-new Obstacle({ x: 300, y: 400, width: 75, height: 100, Color: Color.rgb(220, 190, 130) })
-
 window.tank = tank
 window.ai = ai
 
 function Start() {
+    new Obstacle({ x: 550, y: 200, width: 75, height: 300, Color: Color.rgb(220, 190, 130) })
+    new Obstacle({ x: 300, y: 200, width: 75, height: 100, Color: Color.rgb(220, 190, 130) })
+    new Obstacle({ x: 300, y: 400, width: 75, height: 100, Color: Color.rgb(220, 190, 130) })
+
     console.log(tank)
     console.log(ai)
 
-    let spread = Tofu.ParticleEffects({
-        Geometry: new Geometry.Box(150, 150, 30, 30),
-        Color: Color.rgb(120 - 30, 80 - 30, 250 - 30),
+    let particle = Tofu.ParticleEffects({
+        Geometry: new Geometry.Circle(150, 100, 10),
+        Color: Color.rgb(40, 40, 40),
         CompositeOperation: 'lighter',
         loop: true
     }).spread({
-        amount: 10, interval: 1, rate: 10,
-        speed: 2.5, size: 3.5,
-        fadeout: 0.3, duration: 1,
-        reverse: true
+        amount: 5, interval: 1, rate: 5,
+        speed: 3, size: 2,
+        fadeout: 0.4, duration: 0.4,
     })
 
-    spread.play()
+    window.particle = particle
+
+    // particle.play()
 }
 
 function Animate(fps, delta) {

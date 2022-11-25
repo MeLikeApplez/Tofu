@@ -19,26 +19,22 @@ export default class Mine extends TofuGameObject {
         let center = this.Geometry.getCenter()
 
         this.ExplosionArea = Tofu.Mesh({
-            Geometry: new Geometry.Circle(center.x, center.y, 80),
+            Geometry: new Geometry.Circle(center.x, center.y, 90),
             // Color: Color.rgb(250, 180, 80, 0.5),
             Collision: true
         })
 
         this.ExplosionArea.Collision.toggleNoClip()
         
-        this.Explosion = Tofu.Particle({
-            Geometry: new Geometry.Box(0, 0, 20, 20),
-            ColorCycle: 'random',
-            Color: Color.rgb(200, 120, 40, 0.3),
+        this.Explosion = Tofu.ParticleEffects({
+            Geometry: new Geometry.Box(150, 150, 30, 30),
+            Color: Color.rgb(250, 120, 40, 0.5),
             CompositeOperation: 'lighter',
-            amount: 200,
-            amountSlice: 10,
-            interval: 1,
-            // range: [0, 0, 0, 0],
-            spread: 'circle',
-            spreadSpeed: 3,
-            fadeout: 500,
-            // loop: true
+            loop: true
+        }).spread({
+            amount: 40, interval: 1, rate: 40,
+            speed: 3, size: 3,
+            fadeout: 0.4, duration: 0.4,
         })
 
         Tofu.Scene.add(this)
@@ -91,6 +87,7 @@ export default class Mine extends TofuGameObject {
         this.Tank.mineCount--
 
         this.remove()
+        this.ExplosionArea.remove()
     }
 
 

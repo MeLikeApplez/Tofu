@@ -287,6 +287,7 @@ export default class ParticleEffects extends TofuGameObject {
         if(this.timelineOrder.length > 0 && !this.timelineOrderReady) {
             this.timelineOrderReady = true
 
+            // not perfectly in sync yet
             for(let i = 0; i < this.timelineOrder.length - 1; i++) {
                 let tl = this.timelineOrder[i]
                 let next = this.timelineOrder[i + 1]
@@ -310,6 +311,10 @@ export default class ParticleEffects extends TofuGameObject {
         this.delayCount = 0
         this.animationCount = 0
         this.currentAmount = 0
+    }
+
+    stop() {
+        this.remove()
     }
 
     remove() {
