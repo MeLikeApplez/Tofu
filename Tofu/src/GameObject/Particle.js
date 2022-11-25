@@ -35,7 +35,7 @@ export default class Particle extends TofuGameObject {
         this.Style.ColorIndex = 0
 
         this.loop = loop ?? false
-        this.amount = Calculate.Clamp(amount ?? 1, 0, Infinity)
+        this.amount = Calculate.Clamp(amount ?? 0, 0, Infinity)
         this.amountSlice = Calculate.Clamp(amountSlice ?? 1, 0, this.amount)
         this.currentAmount = 0
 
@@ -48,13 +48,25 @@ export default class Particle extends TofuGameObject {
         this.onPause = null
     }
 
-    // spiral() {
+    spreadParticle(options={}) {
+        const { loop, CompositeOperation, interval } = options
 
-    // }
+        this.loop = loop ?? this.loop
+        this.CompositeOperation = CompositeOperation ?? this.CompositeOperation
+        this.interval = Calculate.Clamp(interval ?? 1000, 1, Infinity)
 
-    // spread() {
+        return this
+    }
 
-    // }
+    spiralParticle(options={}) {
+        const { loop, CompositeOperation, interval } = options
+
+        this.loop = loop ?? this.loop
+        this.CompositeOperation = CompositeOperation ?? this.CompositeOperation
+        this.interval = Calculate.Clamp(interval ?? 1000, 1, Infinity)
+
+        return this
+    }
 
     pause() {
         this.animationState = 'paused'

@@ -1,6 +1,8 @@
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
-const server = app.listen(8080, () => console.log('Listening...'))
+const server = app.listen(process.env.SERVER_PORT, () => console.log('Listening...'))
 
 const { Live, Client } = require('./Live.js')
 const io = require('socket.io')(server, { cors: { origin: '*' } })

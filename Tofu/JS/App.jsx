@@ -67,10 +67,10 @@ export default function App() {
             if(type === 'down' && (key === '/' || key === 'Escape')) displayMultiplayerScreen()
         })
 
-        Tofu.Controller.allowMouseListening = false
-        Tofu.Controller.allowKeyboardListening = false
+        // Tofu.Controller.allowMouseListening = false
+        // Tofu.Controller.allowKeyboardListening = false
 
-        screenSwitcher('Multiplayer')
+        // screenSwitcher('Multiplayer')
     }, [])
 
     // https://www.toptal.com/designers/htmlarrows/

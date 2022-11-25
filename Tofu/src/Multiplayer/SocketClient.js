@@ -27,8 +27,6 @@ class SocketClient {
 
         return new Promise(resolve => {
             let bundle = sTime => {
-                sTime = Date.now() - sTime
-
                 if(typeof callback === 'function') callback(sTime)
             
                 resolve(sTime)
@@ -42,7 +40,7 @@ class SocketClient {
     initEvents() {
         if(this._initEvents) return
 
-        this.socket.on('Ping', sTime => this._Ping(sTime))
+        this.socket.on('Ping', sTime => this._Ping(Date.now() - sTime))
     }
 
     onConnect(callback) {
@@ -68,7 +66,10 @@ class SocketClient {
 
         this.connectionErrorAttempts = 0
 
-        this.socket = io('http://localhost:8080')
+        const SERVER_IP = import.meta.env.VITE_SERVER_IP
+        const SERVER_PORT = import.meta.env.VITE_SERVER_PORT
+
+        this.socket = io.connect(`http://${SERVER_IP}:${SERVER_PORT}`)
 
         this.socket.on('connect', () => {
             if(typeof callback === 'function') callback('success')

@@ -10,9 +10,12 @@ import _Collision from './Physics/Collision'
 import _Geometry from './Geometry/Geometry'
 import _Color from './Color'
 import _Particle from './GameObject/Particle'
+import _ParticleEffects from './GameObject/ParticleEffects'
+import _Level from './Level'
 
 import SAT from 'sat'
 
+export const ParticleEffects = _ParticleEffects
 export const TofuGameObject = _TofuGameObject
 export const Particle = _Particle
 export const Animation = new _Animation()
@@ -20,6 +23,7 @@ export const Collision = _Collision
 export const Geometry = _Geometry
 export const Color = _Color
 export const Calculate = _Calculate
+export const Level = new _Level()
 
 export class Helpers {
     static freezeProperty(object, prop, value) {
@@ -46,6 +50,7 @@ class Tofu {
         this.currentCanvas = { ...this.defaultsCanvas }
         this.existingImages = []
 
+        this.Level = Level
         this.Animation = Animation
         this.SocketClient = SocketClient
 
@@ -54,6 +59,14 @@ class Tofu {
 
     Mesh(options={}) {
         let GameObject = new TofuGameObject(options)
+
+        this.Scene.add(GameObject)
+
+        return GameObject
+    }
+
+    ParticleEffects(options={}) {
+        let GameObject = new ParticleEffects(options)
 
         this.Scene.add(GameObject)
 

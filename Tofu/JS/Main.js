@@ -1,4 +1,4 @@
-import Tofu, { Geometry, Color, Collision } from '../src/Tofu'
+import Tofu, { Geometry, Color, Collision, Particle } from '../src/Tofu'
 import Tank from '../src/Components/Tank'
 import Obstacle from '../src/Components/Obstacle'
 import AI from '../src/Components/AI'
@@ -41,6 +41,20 @@ window.ai = ai
 function Start() {
     console.log(tank)
     console.log(ai)
+
+    let spread = Tofu.ParticleEffects({
+        Geometry: new Geometry.Box(150, 150, 30, 30),
+        Color: Color.rgb(120 - 30, 80 - 30, 250 - 30),
+        CompositeOperation: 'lighter',
+        loop: true
+    }).spread({
+        amount: 10, interval: 1, rate: 10,
+        speed: 2.5, size: 3.5,
+        fadeout: 0.3, duration: 1,
+        reverse: true
+    })
+
+    spread.play()
 }
 
 function Animate(fps, delta) {

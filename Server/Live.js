@@ -1,15 +1,42 @@
+class Room {
+    constructor(host) {
+        this.Clients = new Map()
+        this.Max = 4
+        this.Code = ''
+        this.Status = 'Closed'        
+    }
+
+    static Host() {
+
+    }
+
+    static Member() {
+
+    }
+
+    join() {
+
+    }
+
+    remove() {
+
+    }
+}
+
 class Client {
-    constructor() {
-        this.socket = null
+    constructor(socket) {
+        this.socket = socket
         this.timeCreated = new Date()
+
+        this.sid = socket.id
+        this.uuid = ''
     }
 }
 
 
 class Live {
     constructor() {
-        this.Room = new Map()
-        this.Parties = new Map()
+        this.Rooms = new Map()
     }
 }
 
