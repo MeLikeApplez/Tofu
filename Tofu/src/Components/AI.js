@@ -1,26 +1,25 @@
-import TofuGameObjectProperties from '../GameObject/TofuGameObjectProperties'
 import Tofu, { Calculate } from '../Tofu'
 import Tank from './Tank'
 
 export default class AI {
     constructor(options={}) {
-        const { BodyColor, BarrelColor, x, y, rotation, Target } = options
+        const { BodyColor, BarrelColor, x, y, rotation, Target, movement, aiming, shooting } = options
 
-        this.Tank = new Tank(x, y, BodyColor, BarrelColor)
+        this.Tank = new Tank({ x, y, BodyColor, BarrelColor })
         this.Target = Target || null
 
         this.Tank.rotateBarrel(rotation)
 
         // difficulty 1 - 3
         // 1(easy) - 2(medium) - 3(hard)
-        this.movement = 1
-        this.aiming = 1
-        this.shooting = 1
-
+        this.movement = movement ?? 1
+        this.aiming = aiming ?? 1
+        this.shooting = shooting ?? 1
+        
         // when to aim
         this.intervalUpdate = 3
         this.interval = this.intervalUpdate
-
+        
         // when to shoot
         this.intervalCount = 0 // start
         this.intervalCountLimit = 5 // end
@@ -28,8 +27,12 @@ export default class AI {
         this.setAngle = rotation || 0
         // aiming range
         this.range = 45 
-
+        
         this.second = 0
+        
+        this.setMovementDifficulty(this.movement)
+        this.setAimingDifficulty(this.aiming)
+        this.setShootingDifficulty(this.shooting)
     }
 
     setMovementDifficulty(difficulty) {
@@ -78,9 +81,9 @@ export default class AI {
         this.intervalCount = 0
 
         if(difficulty === 1) { // very slow shots
-            this.intervalCountLimit = 5
+            this.intervalCountLimit = 2
         } else if(difficulty === 2) { // normal speed shots
-            this.intervalCountLimit = 3
+            this.intervalCountLimit = 1.5
         } else if(difficulty === 3) { // rapid shots
             this.intervalCountLimit = 0.5
         }

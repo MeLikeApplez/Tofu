@@ -49,7 +49,7 @@ export default class Geometry {
         return {
             x: function(x=0) {
                 if(ref.GeometrySubType === 'Box' || ref.GeometryType === 'Circle' || ref.GeometryType === 'Text') {
-                    ref.x += x
+                    ref.x += ref.GeometryType === 'Text' ? x / 2 : x
                 }
 
                 if(ref.GeometryType === 'Polygon') {

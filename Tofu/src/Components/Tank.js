@@ -7,19 +7,19 @@ import Mine from './Mine'
 const speed = () => 300 * Tofu.Animation.delta
 
 export default class Tank extends TofuGameObject {
-    constructor(x, y, bodyColor, barrelColor) {
+    constructor({ x, y, BodyColor, BarrelColor, Nametag, BulletSpeed }={}) {
         super()
 
         this.Body = Tofu.Mesh({
             Geometry: new Geometry.Box(0, 0, 100, 80),
-            Color: bodyColor || Color.rgb(80, 130, 250),
+            Color: BodyColor || Color.rgb(80, 130, 250),
             Collision: true,
             name: 'Tank-Body'
         })
 
         this.Barrel = Tofu.Mesh({
             Geometry: new Geometry.Polygon(50, 35, 140, 35, 140, 45, 50, 45),
-            Color: barrelColor || Color.rgb(50, 120, 250),
+            Color: BarrelColor || Color.rgb(50, 120, 250),
             name: 'Tank-Barrel'
         })
 
@@ -34,13 +34,27 @@ export default class Tank extends TofuGameObject {
             fadeout: 0.3, duration: 0.3,
         })
 
+        let fontSize = 20
+        let fontFamily = 'Source Code Pro'
+        let textSize = Tofu.getTextSize(Nametag, fontSize, fontFamily)
+
+        if(textSize.width > 96) fontSize += ((96 - textSize.width) / 12) - 1.75
+
+        // overflowing at ~> 96px
+        this.Nametag = Tofu.Mesh({
+            Geometry: new Geometry.Text(Nametag, x - 24, y + this.Body.Geometry.height + 10),
+            FontSize: fontSize,
+            FontFamily: fontFamily,
+            Color: Color.rgb(255, 255, 255)
+        })
+
         this.Body.Tank = this
         this.Barrel.Tank = this
 
         this.lastTimeShot = 0
         this.shotCount = 0
         this.shotCountLimit = 6
-        this.bulletSpeed = 1
+        this.bulletSpeed = BulletSpeed ?? 1
 
         this.lastTimeMine = 0
         this.mineCount = 0
@@ -88,6 +102,14 @@ export default class Tank extends TofuGameObject {
         return rays
     }
 
+    getAllComponents() {
+        return [this, this.Body, this.Barrel, this.Particle, this.Nametag]
+    }
+
+    toggleNametag() {
+        this.Nametag.Style.Alpha = this.Nametag.Style.Alpha === 1 ? 0 : 1
+    }
+
     kill() {
         let center = this.Body.Geometry.getCenter()
 
@@ -96,7 +118,7 @@ export default class Tank extends TofuGameObject {
 
         this.Particle.play(0.3)
 
-        Tofu.Scene.remove(this, this.Body, this.Barrel)
+        Tofu.Scene.remove(this, this.Body, this.Barrel, this.Nametag)
     }
 
     mine() {
@@ -183,6 +205,7 @@ export default class Tank extends TofuGameObject {
 
         this.Velocity.dy = speed()
 
+        this.Nametag.Geometry.position.y(speed())
         this.Body.Geometry.position.y(speed())
         this.Barrel.Geometry.position.y(speed())
     }
@@ -192,6 +215,7 @@ export default class Tank extends TofuGameObject {
 
         this.Velocity.dy = -speed()
 
+        this.Nametag.Geometry.position.y(-speed())
         this.Body.Geometry.position.y(-speed())
         this.Barrel.Geometry.position.y(-speed())
     }
@@ -201,6 +225,7 @@ export default class Tank extends TofuGameObject {
 
         this.Velocity.dx = -speed()
 
+        this.Nametag.Geometry.position.x(-speed())
         this.Body.Geometry.position.x(-speed())
         this.Barrel.Geometry.position.x(-speed())
     }
@@ -210,6 +235,7 @@ export default class Tank extends TofuGameObject {
 
         this.Velocity.dx = speed()
 
+        this.Nametag.Geometry.position.x(speed())
         this.Body.Geometry.position.x(speed())
         this.Barrel.Geometry.position.x(speed())
     }

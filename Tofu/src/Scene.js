@@ -1,4 +1,8 @@
-import Tofu, { Animation, TofuGameObject } from './Tofu'
+import Tofu, { Animation, TofuGameObject, Level } from './Tofu'
+
+// import Tank from '../src/Components/Tank'
+// import Obstacle from '../src/Components/Obstacle'
+// import AI from '../src/Components/AI'
 
 const GameObjectList = []
 
@@ -35,6 +39,39 @@ export default class Scene {
             this.height = innerHeight
 
             this.setSize(this.width, this.height)
+        }
+    }
+
+    async loadLevelMap(levelMap, preserve=[]) {
+        if(!Level.isLevelMap(levelMap)) return false
+        
+        console.warn('LOADING LEVEL MAP...')
+
+        // clear everything
+        GameObjectList.splice(0, GameObjectList.length)
+        
+        // preserve
+        this.add(...preserve)
+
+        const [ Obstacle, Tank, AI ] = (await Promise.all([import('./Components/Obstacle'), import('./Components/Tank'), import('./Components/AI')])).map(v => v.default)
+
+
+        for(let i = 0; i < levelMap.Obstacles.length; i++) {
+            let obstacle = levelMap.Obstacles[i]
+
+            new Obstacle(obstacle)
+        }
+
+        for(let i = 0; i < levelMap.Tanks.length; i++) {
+            let tank = levelMap.Tanks[i]
+
+            // a bit imperfect
+            if(tank.type === 'Player') {
+                new Tank(tank)
+            } else if(tank.type === 'AI') {
+                // needs extra parameters for AI
+                new AI({ ...tank, ...tank.AI })
+            }
         }
     }
 

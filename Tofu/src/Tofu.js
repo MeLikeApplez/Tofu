@@ -83,8 +83,8 @@ class Tofu {
 
     // <Drawing>
 
-    getTextSize(text='', fontSize=this.currentCanvas.fontSize) {
-        this.canvasContext.font = `${fontSize}px ${this.currentCanvas.fontFamily}`
+    getTextSize(text='', fontSize=this.currentCanvas.fontSize, fontFamily=this.currentCanvas.fontFamily) {
+        this.canvasContext.font = `${fontSize}px ${fontFamily}`
 
         const metric = this.canvasContext.measureText(text)
 
@@ -349,7 +349,7 @@ class Tofu {
         this.Scene = new Scene(canvas, width, height)
         this.Controller = new Controller(canvas)
 
-		this.toGlobal({ Tofu: this, Scene: this.Scene, Collision, Geometry, Color, Calculate, SAT })
+		this.toGlobal({ Tofu: this, Scene: this.Scene, Collision, Geometry, Color, Calculate, SAT, Level })
     }
 
     addScript(Init, Draw) {
